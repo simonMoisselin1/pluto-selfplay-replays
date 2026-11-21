@@ -3,7 +3,6 @@
 import csv
 from collections import Counter, defaultdict
 from html import escape
-from itertools import groupby
 from pathlib import Path
 from urllib.parse import quote, urlencode
 
@@ -30,9 +29,9 @@ def page_link(matchup, number, text):
     return f"[{text}]({page_name(matchup, number)})"
 
 
-def map_heading(value):
+def table_text(value):
     text = escape(" ".join(value.splitlines()), quote=False)
-    return text.translate(str.maketrans({ch: "\\" + ch for ch in "\\`*_[]"}))
+    return text.translate(str.maketrans({ch: "\\" + ch for ch in "\\`*_[]|"}))
 
 
 def duration(frames):
@@ -143,30 +142,28 @@ def render_home(groups):
     return "\n".join(lines) + "\n"
 
 
-def game_entry(game):
-    winner = game["winner_slot"]
-    result = f"{game['winner_race']} ({winner}) won · {game['duration']}"
-    lines = [f"**{result}** · {watch_link(game)}<br>"]
-    for slot, race in (("p1", game["matchup"][0]), ("p2", game["matchup"][2])):
-        opening = game[f"opening_{slot}"]
-        label = f"`{opening}`" if opening else "Opening unrecorded"
-        lines.append(
-            f"{slot.upper()} {RACES[race]} · {label} · {game[f'{slot}_peak_workers']} workers · "
-            f"{game[f'{slot}_peak_supply']} supply<br>"
-        )
-    buildings = int(game[f"{winner.lower()}_final_buildings"])
-    noun = "building" if buildings == 1 else "buildings"
+def opening_cell(race, opening):
+    label = escape(opening, quote=False).replace("|", "&#124;")
+    return f"{RACES[race]}<br><code>{label}</code>" if opening else RACES[race]
+
+
+def game_row(game):
     path = quote(game["replay"], safe="/")
-    details = [
-        f"{buildings} {noun} left for {winner}",
-        f"[Download .rep · {game['replay_sha256'][:12]}](../{path}?raw=true)",
+    cells = [
+        f"**{game['winner_race']} ({game['winner_slot']})**",
+        game["duration"],
+        watch_link(game),
+        table_text(game["map"]),
+        f"[{game['replay_sha256'][:12]}](../{path}?raw=true)",
+        opening_cell(game["matchup"][0], game["opening_p1"]),
+        opening_cell(game["matchup"][2], game["opening_p2"]),
+        f"{game['p1_peak_workers']} / {game['p2_peak_workers']}",
+        f"{game['p1_peak_supply']} / {game['p2_peak_supply']}",
+        f"{game['p1_final_buildings']} / {game['p2_final_buildings']}",
+        "Yes" if game["watched"] == "yes" else "Unconfirmed",
+        "Yes" if game["playback"] == "verified" else "Unconfirmed",
     ]
-    if game["watched"] == "yes":
-        details.append("Watched in full")
-    if game["playback"] != "verified":
-        details.append("Playback unconfirmed")
-    lines.append(" · ".join(details))
-    return lines
+    return "| " + " | ".join(cells) + " |"
 
 
 def render_page(key, games, number, pages):
@@ -190,14 +187,16 @@ def render_page(key, games, number, pages):
     if pages > 1:
         links = [f"**{index}**" if index == number else page_link(key, index, index) for index in range(1, pages + 1)]
         lines.extend([f"Games {first + 1:,}–{first + len(rows):,} · Pages {' / '.join(links)}", ""])
-    lines.extend(["Times are at Fastest speed. Worker and supply counts are each player's peaks.", ""])
-    for map_name, map_games in groupby(rows, key=lambda game: game["map"]):
-        lines.extend([f"## {map_heading(map_name)}", ""])
-        for game in map_games:
-            lines.extend(game_entry(game))
-            lines.append("")
+    lines.extend([
+        "Times are at Fastest speed. Paired stats are shown in P1 / P2 order.",
+        "",
+        "| Winner | Time | Watch | Map | Replay ↓ | P1 opening | P2 opening | Peak workers | Peak supply | "
+        "Buildings left | Watched in full | Final frame verified |",
+        "| --- | ---: | --- | --- | --- | --- | --- | ---: | ---: | ---: | --- | --- |",
+    ])
+    lines.extend(game_row(game) for game in rows)
     if number < pages:
-        lines.append(page_link(key, number + 1, "Next page →"))
+        lines.extend(["", page_link(key, number + 1, "Next page →")])
     lines.extend(["", GENERATED])
     return "\n".join(lines) + "\n"
 

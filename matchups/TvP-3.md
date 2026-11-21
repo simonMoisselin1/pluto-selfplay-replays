@@ -7,39 +7,15 @@
 
 Games 601–606 · Pages [1](TvP.md) / [2](TvP-2.md) / **3**
 
-Times are at Fastest speed. Worker and supply counts are each player's peaks.
+Times are at Fastest speed. Paired stats are shown in P1 / P2 order.
 
-## 제3세계(Third World) 1.0
-
-**Terran (P1) won · 13:40** · [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2Fcbe1352d2db7a09d.rep)<br>
-P1 Terran · `free` · 37 workers · 93 supply<br>
-P2 Protoss · `FFE~tr` · 40 workers · 74 supply<br>
-26 buildings left for P1 · [Download .rep · cbe1352d2db7](../replays/TvP/cbe1352d2db7a09d.rep?raw=true)
-
-**Terran (P1) won · 15:30** · [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2F9456df1e207bda03.rep)<br>
-P1 Terran · `1FactCC~tr` · 41 workers · 127 supply<br>
-P2 Protoss · `Carrier~tr` · 43 workers · 95 supply<br>
-34 buildings left for P1 · [Download .rep · 9456df1e207b](../replays/TvP/9456df1e207bda03.rep?raw=true)
-
-**Terran (P1) won · 17:35** · [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2Fecb7d4962844b904.rep)<br>
-P1 Terran · `free` · 58 workers · 101 supply<br>
-P2 Protoss · `FFE~tr` · 42 workers · 85 supply<br>
-29 buildings left for P1 · [Download .rep · ecb7d4962844](../replays/TvP/ecb7d4962844b904.rep?raw=true)
-
-**Terran (P2) won · 18:31** · [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2F35ffc04a5078b577.rep)<br>
-P1 Protoss · `free` · 53 workers · 127 supply<br>
-P2 Terran · `o:RaxFact` · 42 workers · 125 supply<br>
-35 buildings left for P2 · [Download .rep · 35ffc04a5078](../replays/TvP/35ffc04a5078b577.rep?raw=true)
-
-**Terran (P1) won · 19:21** · [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2Fe4feecb6bf41af74.rep)<br>
-P1 Terran · `2RaxBioFE~tr` · 47 workers · 141 supply<br>
-P2 Protoss · `12Nexus~tr` · 54 workers · 110 supply<br>
-41 buildings left for P1 · [Download .rep · e4feecb6bf41](../replays/TvP/e4feecb6bf41af74.rep?raw=true)
-
-**Terran (P1) won · 22:36** · [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2F8cdca8b135d8e2e2.rep)<br>
-P1 Terran · `free` · 55 workers · 130 supply<br>
-P2 Protoss · `free` · 30 workers · 81 supply<br>
-39 buildings left for P1 · [Download .rep · 8cdca8b135d8](../replays/TvP/8cdca8b135d8e2e2.rep?raw=true)
-
+| Winner | Time | Watch | Map | Replay ↓ | P1 opening | P2 opening | Peak workers | Peak supply | Buildings left | Watched in full | Final frame verified |
+| --- | ---: | --- | --- | --- | --- | --- | ---: | ---: | ---: | --- | --- |
+| **Terran (P1)** | 13:40 | [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2Fcbe1352d2db7a09d.rep) | 제3세계(Third World) 1.0 | [cbe1352d2db7](../replays/TvP/cbe1352d2db7a09d.rep?raw=true) | Terran<br><code>free</code> | Protoss<br><code>FFE~tr</code> | 37 / 40 | 93 / 74 | 26 / 0 | Unconfirmed | Yes |
+| **Terran (P1)** | 15:30 | [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2F9456df1e207bda03.rep) | 제3세계(Third World) 1.0 | [9456df1e207b](../replays/TvP/9456df1e207bda03.rep?raw=true) | Terran<br><code>1FactCC~tr</code> | Protoss<br><code>Carrier~tr</code> | 41 / 43 | 127 / 95 | 34 / 0 | Unconfirmed | Yes |
+| **Terran (P1)** | 17:35 | [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2Fecb7d4962844b904.rep) | 제3세계(Third World) 1.0 | [ecb7d4962844](../replays/TvP/ecb7d4962844b904.rep?raw=true) | Terran<br><code>free</code> | Protoss<br><code>FFE~tr</code> | 58 / 42 | 101 / 85 | 29 / 0 | Unconfirmed | Yes |
+| **Terran (P2)** | 18:31 | [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2F35ffc04a5078b577.rep) | 제3세계(Third World) 1.0 | [35ffc04a5078](../replays/TvP/35ffc04a5078b577.rep?raw=true) | Protoss<br><code>free</code> | Terran<br><code>o:RaxFact</code> | 53 / 42 | 127 / 125 | 0 / 35 | Unconfirmed | Yes |
+| **Terran (P1)** | 19:21 | [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2Fe4feecb6bf41af74.rep) | 제3세계(Third World) 1.0 | [e4feecb6bf41](../replays/TvP/e4feecb6bf41af74.rep?raw=true) | Terran<br><code>2RaxBioFE~tr</code> | Protoss<br><code>12Nexus~tr</code> | 47 / 54 | 141 / 110 | 41 / 0 | Unconfirmed | Yes |
+| **Terran (P1)** | 22:36 | [Watch](https://bmnielsen.github.io/openbw-replay-viewer/?rep=https%3A%2F%2Fraw.githubusercontent.com%2FsimonMoisselin1%2Fpluto-selfplay-replays%2Fmain%2Freplays%2FTvP%2F8cdca8b135d8e2e2.rep) | 제3세계(Third World) 1.0 | [8cdca8b135d8](../replays/TvP/8cdca8b135d8e2e2.rep?raw=true) | Terran<br><code>free</code> | Protoss<br><code>free</code> | 55 / 30 | 130 / 81 | 39 / 0 | Unconfirmed | Yes |
 
 <!-- Generated by tools/build_index.py from games.csv. -->
