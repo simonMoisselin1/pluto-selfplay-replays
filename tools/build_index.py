@@ -110,7 +110,9 @@ def render_home(groups):
         "Select **Watch** to open a game in the OpenBW browser viewer. On each match-up page, "
         "the replay ID downloads the original `.rep` file. Games are sorted by map and then by duration at Fastest speed.",
         "",
-        "The [full index](games.csv) includes the recording source, frame count and SHA-256 of each replay. "
+        "The [CSV index](games.csv?raw=true) includes the recording source, frame count and SHA-256 of each replay. "
+        "[Download the full collection as a ZIP](https://github.com/simonMoisselin1/pluto-selfplay-replays/archive/refs/heads/main.zip).",
+        "",
         "A confirmed human viewing means someone has watched the entire game. Automated playback is recorded separately.",
         "",
         "To report a full viewing, open a pull request changing that replay’s `watched` value to `yes` in "
