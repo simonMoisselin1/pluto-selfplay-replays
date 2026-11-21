@@ -1,7 +1,9 @@
 """Generate the community replay index from games.csv using Python 3."""
 
 import csv
-from collections import defaultdict
+from collections import Counter, defaultdict
+from html import escape
+from itertools import groupby
 from pathlib import Path
 from urllib.parse import quote, urlencode
 
@@ -28,10 +30,9 @@ def page_link(matchup, number, text):
     return f"[{text}]({page_name(matchup, number)})"
 
 
-def table_text(value):
-    return " ".join(value.splitlines()).replace("&", "&amp;").replace("<", "&lt;").replace(
-        ">", "&gt;"
-    ).replace("\\", "\\\\").replace("|", "\\|")
+def map_heading(value):
+    text = escape(" ".join(value.splitlines()), quote=False)
+    return text.translate(str.maketrans({ch: "\\" + ch for ch in "\\`*_[]"}))
 
 
 def duration(frames):
@@ -55,6 +56,17 @@ def read_games():
                 raise ValueError(f"games.csv line {line} has an unknown watched value")
             if game["playback"] not in ("verified", "unconfirmed"):
                 raise ValueError(f"games.csv line {line} has an unknown playback value")
+            if game["duration"] != duration(game["frames"]):
+                raise ValueError(f"games.csv line {line} has a duration inconsistent with its frame count")
+            winner = game["winner_slot"]
+            if winner not in ("P1", "P2"):
+                raise ValueError(f"games.csv line {line} has an unknown winner slot: {winner!r}")
+            winner_race = RACES[matchup[0] if winner == "P1" else matchup[2]]
+            if game["winner_race"] != winner_race:
+                raise ValueError(f"games.csv line {line} has an inconsistent winner race")
+            defeated = "p2" if winner == "P1" else "p1"
+            if game[f"{defeated}_final_state"] != "2" or game[f"{winner.lower()}_final_state"] == "2":
+                raise ValueError(f"games.csv line {line} disagrees with the engine's recorded defeat")
             replay = Path(game["replay"])
             if replay.is_absolute() or ".." in replay.parts or replay.suffix.lower() != ".rep":
                 raise ValueError(f"games.csv line {line} has an invalid replay path")
@@ -108,9 +120,17 @@ def render_home(groups):
         "## Watch a game",
         "",
         "Select **Watch** to open a game in the OpenBW browser viewer. On each match-up page, "
-        "the replay ID downloads the original `.rep` file. Games are sorted by map and then by duration at Fastest speed.",
+        "each game includes a link to its original `.rep` file. Games are sorted by map and then by duration.",
         "",
-        "The [CSV index](games.csv?raw=true) includes the recording source, frame count and SHA-256 of each replay. "
+        "## Reading a result",
+        "",
+        "P1 and P2 are the two replay slots. At the final frame of every indexed game, OpenBW recorded "
+        "one player's defeat (state 2) with zero buildings left. The surviving player is listed as the winner.",
+        "Durations are rounded to the nearest second at Fastest speed (42 milliseconds per frame). "
+        "Peak workers and peak used supply are measured separately for each player every six frames and at game end.",
+        "",
+        "The [CSV index](games.csv?raw=true) includes each game's result, duration, player statistics, "
+        "final building counts, source and replay SHA-256. "
         "[Download the full collection as a ZIP](https://github.com/simonMoisselin1/pluto-selfplay-replays/archive/refs/heads/main.zip).",
         "",
         "A confirmed human viewing means someone has watched the entire game. Automated playback is recorded separately.",
@@ -123,6 +143,32 @@ def render_home(groups):
     return "\n".join(lines) + "\n"
 
 
+def game_entry(game):
+    winner = game["winner_slot"]
+    result = f"{game['winner_race']} ({winner}) won · {game['duration']}"
+    lines = [f"**{result}** · {watch_link(game)}<br>"]
+    for slot, race in (("p1", game["matchup"][0]), ("p2", game["matchup"][2])):
+        opening = game[f"opening_{slot}"]
+        label = f"`{opening}`" if opening else "Opening unrecorded"
+        lines.append(
+            f"{slot.upper()} {RACES[race]} · {label} · {game[f'{slot}_peak_workers']} workers · "
+            f"{game[f'{slot}_peak_supply']} supply<br>"
+        )
+    buildings = int(game[f"{winner.lower()}_final_buildings"])
+    noun = "building" if buildings == 1 else "buildings"
+    path = quote(game["replay"], safe="/")
+    details = [
+        f"{buildings} {noun} left for {winner}",
+        f"[Download .rep · {game['replay_sha256'][:12]}](../{path}?raw=true)",
+    ]
+    if game["watched"] == "yes":
+        details.append("Watched in full")
+    if game["playback"] != "verified":
+        details.append("Playback unconfirmed")
+    lines.append(" · ".join(details))
+    return lines
+
+
 def render_page(key, games, number, pages):
     first = (number - 1) * PAGE_SIZE
     rows = games[first:first + PAGE_SIZE]
@@ -132,29 +178,26 @@ def render_page(key, games, number, pages):
         lines.extend(["No replays indexed for this match-up yet.", "", GENERATED])
         return "\n".join(lines) + "\n"
     _, watched, verified = counts(games)
+    mirror = key[0] == key[2]
+    wins = Counter(game["winner_slot" if mirror else "winner_race"] for game in games)
+    sides = ("P1", "P2") if mirror else (RACES[key[0]], RACES[key[2]])
+    record = " · ".join(f"{side} {wins[side]:,} wins" for side in sides)
     lines.extend([
-        f"**{len(games):,} games** · {watched:,} watched in full · {verified:,} verified by automated playback.",
+        f"**{len(games):,} games** · {record}<br>",
+        f"{watched:,} watched in full · {verified:,} verified by automated playback.",
         "",
     ])
     if pages > 1:
         links = [f"**{index}**" if index == number else page_link(key, index, index) for index in range(1, pages + 1)]
         lines.extend([f"Games {first + 1:,}–{first + len(rows):,} · Pages {' / '.join(links)}", ""])
-    lines.extend([
-        "| Replay ↓ | Watch | Map | P1 vs P2 | Duration | P1 opening | P2 opening | Watched in full | Final frame verified |",
-        "| --- | --- | --- | --- | ---: | --- | --- | --- | --- |",
-    ])
-    for game in rows:
-        path = quote(game["replay"], safe="/")
-        link = f"[{game['replay_sha256'][:12]}](../{path}?raw=true)"
-        seen = "Yes" if game["watched"] == "yes" else "Unconfirmed"
-        checked = "Yes" if game["playback"] == "verified" else "Unconfirmed"
-        cells = [
-            link, watch_link(game), table_text(game["map"]), game["matchup"], duration(game["frames"]),
-            table_text(game["opening_p1"]) or "—", table_text(game["opening_p2"]) or "—", seen, checked,
-        ]
-        lines.append("| " + " | ".join(cells) + " |")
+    lines.extend(["Times are at Fastest speed. Worker and supply counts are each player's peaks.", ""])
+    for map_name, map_games in groupby(rows, key=lambda game: game["map"]):
+        lines.extend([f"## {map_heading(map_name)}", ""])
+        for game in map_games:
+            lines.extend(game_entry(game))
+            lines.append("")
     if number < pages:
-        lines.extend(["", page_link(key, number + 1, "Next page →")])
+        lines.append(page_link(key, number + 1, "Next page →"))
     lines.extend(["", GENERATED])
     return "\n".join(lines) + "\n"
 

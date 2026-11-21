@@ -19,9 +19,14 @@ Each page groups both player orders. The race order follows the two players in t
 
 ## Watch a game
 
-Select **Watch** to open a game in the OpenBW browser viewer. On each match-up page, the replay ID downloads the original `.rep` file. Games are sorted by map and then by duration at Fastest speed.
+Select **Watch** to open a game in the OpenBW browser viewer. On each match-up page, each game includes a link to its original `.rep` file. Games are sorted by map and then by duration.
 
-The [CSV index](games.csv?raw=true) includes the recording source, frame count and SHA-256 of each replay. [Download the full collection as a ZIP](https://github.com/simonMoisselin1/pluto-selfplay-replays/archive/refs/heads/main.zip).
+## Reading a result
+
+P1 and P2 are the two replay slots. At the final frame of every indexed game, OpenBW recorded one player's defeat (state 2) with zero buildings left. The surviving player is listed as the winner.
+Durations are rounded to the nearest second at Fastest speed (42 milliseconds per frame). Peak workers and peak used supply are measured separately for each player every six frames and at game end.
+
+The [CSV index](games.csv?raw=true) includes each game's result, duration, player statistics, final building counts, source and replay SHA-256. [Download the full collection as a ZIP](https://github.com/simonMoisselin1/pluto-selfplay-replays/archive/refs/heads/main.zip).
 
 A confirmed human viewing means someone has watched the entire game. Automated playback is recorded separately.
 
